@@ -1,7 +1,8 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserService } from './user.service';
 import { RoleGuard } from 'src/auth/guards/role.guard';
+import { FilterUserDto } from './dtos/user.dto';
 
 @Controller('user')
 export class UserController {
@@ -17,7 +18,7 @@ export class UserController {
     @UseGuards( new RoleGuard(["admin"]))
     @UseGuards(AuthGuard)
     @Get("get-all")
-    getAll() {
-        return this.userService.getAll()
+    getAll(@Query() query: FilterUserDto) {
+        return this.userService.getAll(query)
     }
 }
