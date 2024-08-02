@@ -26,36 +26,61 @@ export class UserService {
     const item_in_page = Number(query.item_page) || 10;
     const search = query.search || '';
 
-    const response = await this.prismaService.user.findMany({
-      where: {
-        role: {
-          not: 'admin',
+    const [users, count] = await this.prismaService.$transaction([
+      this.prismaService.user.findMany({
+        where: {
+          role: {
+            not: 'admin',
+          },
+          OR: [
+            {
+              email: {
+                startsWith: `%${search}%`,
+              },
+            },
+            {
+              name: {
+                startsWith: `%${search}%`,
+              },
+            },
+          ],
         },
-        OR: [
-          {
-            email: {
-              startsWith: `%${search}%`,
-            },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          phone: true,
+        },
+        skip: (page - 1) * item_in_page,
+        take: item_in_page,
+        orderBy: {
+          id: 'asc',
+        },
+      }),
+      this.prismaService.user.count({
+        where: {
+          role: {
+            not: 'admin',
           },
-          {
-            name: {
-              startsWith: `%${search}%`,
+          OR: [
+            {
+              email: {
+                startsWith: `%${search}%`,
+              },
             },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phone: true,
-      },
-      skip: (page - 1) * item_in_page,
-      take: item_in_page,
-      orderBy: {
-        id: 'asc'
-      }
-    });
-    return response;
+            {
+              name: {
+                startsWith: `%${search}%`,
+              },
+            },
+          ],
+        },
+      }),
+    ]);
+
+    return {
+      users,
+      count,
+    };
   }
 }
