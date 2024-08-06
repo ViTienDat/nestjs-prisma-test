@@ -14,12 +14,17 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  password   String
-  name       String
-  phone      String?
-  role       String   @default("user")
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  user_id     Int      @id @default(autoincrement())
+  username    String   @unique
+  password    String
+  email       String   @unique
+  full_name   String
+  avatar_url  String?
+  role        String   @default("user")
+  google_id   String?  @unique
+  facebook_id String?  @unique
+  is_2fa      Boolean  @default(true)
+  is_verify   Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }
