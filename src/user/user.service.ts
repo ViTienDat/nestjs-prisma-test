@@ -94,6 +94,28 @@ export class UserService {
     };
   }
 
+  async enable2fa(id: number): Promise<User> {
+    return this.prismaService.user.update({
+      where: {
+        user_id: id
+      },
+      data: {
+        is_2fa: true
+      }
+    })
+  }
+
+  async disable2fa(id: number): Promise<User> {
+    return this.prismaService.user.update({
+      where: {
+        user_id: id
+      },
+      data: {
+        is_2fa: false
+      }
+    })
+  }
+
 
 // Admin
   async updateUserByAdmin(id: number, data: UpdateUserByAdminDto):Promise<User> {

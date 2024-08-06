@@ -23,9 +23,18 @@ export class UserController {
         return this.userService.getAll(query)
     }
 
-    @Post('/api/users/enable-2fa')
-    Enable2fa() {
+    @UseGuards(AuthGuard)
+    @Put('/api/users/enable-2fa')
+    enable2fa(@Req() req:any) {
+        const user_id = req.user_data.user_id
+        return this.userService.enable2fa(user_id)
+    }
 
+    @UseGuards(AuthGuard)
+    @Put('/api/users/disable-2fa')
+    disable2fa(@Req() req:any) {
+        const user_id = req.user_data.user_id
+        return this.userService.disable2fa(user_id)
     }
 
 
