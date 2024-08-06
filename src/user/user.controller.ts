@@ -2,8 +2,9 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards 
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UserService } from './user.service';
 import { RoleGuard } from 'src/auth/guards/role.guard';
-import { FilterUserDto, UpdateUserByAdminDto } from './dtos/user.dto';
+import { FilterUserDto } from './dtos/filter-user.dto';
 import { User } from '@prisma/client';
+import { UpdateUserByAdminDto } from './dtos/update-user-by-admin.dto';
 
 @Controller('user')
 export class UserController {
@@ -14,6 +15,13 @@ export class UserController {
     @Get("/api/user/:id")
     getDetail(@Param('id') id:string) {
         return this.userService.getUserDetail(Number(id))
+    }
+
+    @UseGuards(AuthGuard)
+    @Get("/api/users/me")
+    getMe(@Req() req:any) {
+        const user_id = req.user_data.user_id
+        return this.userService.getMe(Number(user_id))
     }
 
     @UseGuards( new RoleGuard(["admin"]))

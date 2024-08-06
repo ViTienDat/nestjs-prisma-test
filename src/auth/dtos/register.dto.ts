@@ -15,11 +15,3 @@ export class RegisterDto {
   avatar_url: string;
   phone: string;
 }
-
-export class LoginDto {
-  @IsNotEmpty()
-  username: string;
-
-  @MinLength(6)
-  password: string;
-}

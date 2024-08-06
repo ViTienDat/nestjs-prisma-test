@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
-import { FilterUserDto, UpdateUserByAdminDto } from './dtos/user.dto';
+import { FilterUserDto } from './dtos/filter-user.dto';
+import { UpdateUserByAdminDto } from './dtos/update-user-by-admin.dto';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,27 @@ export class UserService {
         is_2fa: true,
         created_at: true,
       },
+    });
+    return response;
+  }
+
+  async getMe(id: number): Promise<any> {
+    const response = await this.prismaService.user.findUnique({
+      where: { user_id: id },
+      select: {
+        user_id: true,
+        username: true,
+        email: true,
+        full_name: true,
+        avatar_url: true,
+        role: true,
+        facebook_id: true,
+        google_id: true,
+        is_2fa: true,
+        is_verify: true,
+        created_at: true,
+        updated_at: true
+      }
     });
     return response;
   }

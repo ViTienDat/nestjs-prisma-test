@@ -1,9 +1,3 @@
-export class FilterUserDto {
-  page: string;
-  item_page: string;
-  search: string;
-}
-
 export class UpdateUserByAdminDto {
   username: string;
   email: string;
